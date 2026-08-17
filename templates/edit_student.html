@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Student</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+        }
+
+        .container {
+            width: 500px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .15);
+        }
+
+        h2 {
+            text-align: center;
+            color: #2563eb;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 12px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #2563eb;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Edit Student</h2>
+        <form action="/update_student/{{ student.id }}" method="POST">
+            <label>Roll Number</label>
+            <input type="text" name="roll_no" value="{{ student.roll_no }}" required>
+            <label>Student Name</label>
+            <input type="text" name="name" value="{{ student.name }}" required>
+            <label>Attendance (%)</label>
+            <input type="number" name="attendance" min="0" max="100" value="{{ student.attendance }}" required>
+            <label>Study Hours</label>
+            <input type="number" name="study_hours" step="0.1" value="{{ student.study_hours }}" required>
+            <label>Assignment Marks</label>
+            <input type="number" name="assignment_marks" min="0" max="100" value="{{ student.assignment_marks }}"
+                required>
+            <label>Previous Grade</label>
+            <select name="previous_grade" required>
+                <option value="A" {% if student.previous_grade=="A" %}selected{% endif %}>A</option>
+                <option value="B" {% if student.previous_grade=="B" %}selected{% endif %}>B</option>
+                <option value="C" {% if student.previous_grade=="C" %}selected{% endif %}>C</option>
+                <option value="D" {% if student.previous_grade=="D" %}selected{% endif %}>D</option>
+                <option value="F" {% if student.previous_grade=="F" %}selected{% endif %}>F</option>
+            </select>
+            <label>Final Grade</label>
+            <select name="final_grade" required>
+                <option value="A" {% if student.final_grade=="A" %}selected{% endif %}>A</option>
+                <option value="B" {% if student.final_grade=="B" %}selected{% endif %}>B</option>
+                <option value="C" {% if student.final_grade=="C" %}selected{% endif %}>C</option>
+                <option value="D" {% if student.final_grade=="D" %}selected{% endif %}>D</option>
+                <option value="F" {% if student.final_grade=="F" %}selected{% endif %}>F</option>
+            </select>
+            <button type="submit">
+                Update Student
+            </button>
+        </form>
+        <br>
+        <a href="/students" class="back">
+            ← Back to Student Records
+        </a>
+    </div>
+    <script>
+
+        // Form Validation
+        document.querySelector("form").addEventListener("submit", function (e) {
+            let attendance = parseFloat(document.getElementsByName("attendance")[0].value);
+            let studyHours = parseFloat(document.getElementsByName("study_hours")[0].value);
+            let assignmentMarks = parseFloat(document.getElementsByName("assignment_marks")[0].value);
+            let previousGrade = parseFloat(document.getElementsByName("previous_grade")[0].value);
+            if (attendance < 0 || attendance > 100) {
+                alert("Attendance must be between 0 and 100.");
+                e.preventDefault();
+                return;
+            }
+            if (studyHours < 0) {
+                alert("Study Hours cannot be negative.");
+                e.preventDefault();
+                return;
+            }
+            if (assignmentMarks < 0 || assignmentMarks > 100) {
+                alert("Assignment Marks must be between 0 and 100.");
+                e.preventDefault();
+                return;
+            }
+            if (previousGrade < 0 || previousGrade > 100) {
+                alert("Previous Grade must be between 0 and 100.");
+                e.preventDefault();
+                return;
+            }
+        });
+    </script>
+</body>
+
+</html>

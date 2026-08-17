@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Performance Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+        }
+
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            background: #2563eb;
+
+            color: white;
+
+            padding: 18px 30px;
+
+            border-radius: 15px;
+
+            margin: 20px;
+
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .15);
+        }
+
+        .logo-section img {
+
+            width: 75px;
+            height: 75px;
+            border-radius: 10px;
+            background: white;
+            padding: 5px;
+
+        }
+
+        .title-section {
+
+            flex: 1;
+            margin-left: 20px;
+
+        }
+
+        .title-section h1 {
+
+            margin: 0;
+            font-size: 32px;
+
+        }
+
+        .title-section p {
+
+            margin: 5px 0;
+            opacity: .9;
+
+        }
+
+        .title-section span {
+
+            font-size: 14px;
+
+        }
+
+        .header-right {
+
+            display: flex;
+            align-items: center;
+            gap: 20px;
+
+        }
+
+        .notification-btn {
+
+            background: white;
+            color: #2563eb;
+            border: none;
+
+            width: 45px;
+            height: 45px;
+
+            border-radius: 50%;
+
+            cursor: pointer;
+
+            font-size: 22px;
+
+        }
+
+        .admin-profile {
+
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+        }
+
+        .admin-profile img {
+
+            width: 45px;
+            border-radius: 50%;
+
+        }
+
+        .logout-btn {
+
+            text-decoration: none;
+
+            background: #ef4444;
+
+            color: white;
+
+            padding: 10px 18px;
+
+            border-radius: 8px;
+
+            font-weight: bold;
+
+        }
+
+        .logout-btn:hover {
+
+            background: #dc2626;
+
+        }
+
+        .stats-container {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+            gap: 20px;
+
+            margin: 20px;
+
+        }
+
+        .stat-card {
+
+            display: flex;
+
+            align-items: center;
+
+            padding: 20px;
+
+            border-radius: 15px;
+
+            color: white;
+
+            box-shadow: 0 10px 20px rgba(0, 0, 0, .12);
+
+            transition: .3s;
+
+        }
+
+        .stat-card:hover {
+
+            transform: translateY(-8px);
+
+        }
+
+        .icon {
+
+            font-size: 45px;
+
+            margin-right: 20px;
+
+        }
+
+        .info h3 {
+
+            margin: 0;
+
+            font-size: 30px;
+
+        }
+
+        .info p {
+
+            margin-top: 5px;
+
+            font-size: 15px;
+
+        }
+
+        .blue {
+
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+
+        }
+
+        .green {
+
+            background: linear-gradient(135deg, #16a34a, #22c55e);
+
+        }
+
+        .purple {
+
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+
+        }
+
+        .orange {
+
+            background: linear-gradient(135deg, #ea580c, #f97316);
+
+        }
+
+        .cyan {
+
+            background: linear-gradient(135deg, #0891b2, #06b6d4);
+
+        }
+
+        .success {
+
+            background: linear-gradient(135deg, #15803d, #22c55e);
+
+        }
+
+        .danger {
+
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+
+        }
+
+
+        .chart-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .chart-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, .15);
+        }
+
+        .chart-box h3 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #2563eb;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 300px !important;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 20px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .back:hover {
+            background: #1d4ed8;
+        }
+
+        @media(max-width:900px) {
+            .chart-container {
+                grid-template-columns: 1fr;
+            }
+        }
+.dashboard-buttons{
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 25px 0;
+    flex-wrap: wrap;
+}
+
+.dashboard-buttons .btn{
+    background: linear-gradient(135deg, #4f46e5, #2563eb);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 22px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(37,99,235,0.3);
+}
+
+.dashboard-buttons .btn:hover{
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(37,99,235,0.4);
+}
+
+.dashboard-buttons .btn:active{
+    transform: scale(0.96);
+}
+
+    </style>
+</head>
+
+<body>
+    <header class="top-header">
+
+        <div class="logo-section">
+            <img src="{{ url_for('static', filename='images/Student_performance_prediction_logo.png') }}" alt="Logo">
+        </div>
+
+        <div class="title-section">
+            <h1>Student Performance Dashboard</h1>
+            <p>Welcome Back, Administrator</p>
+            <span id="currentDate"></span>
+        </div>
+
+        <div class="header-right">
+            <a href="/" class="logout-btn">Logout</a>
+        </div>
+
+    </header>
+    <div class="dashboard-buttons">
+        <a href="{{ url_for('student.students') }}">
+            <button class="btn">🎓 Students</button>
+        </a>
+        <a href="{{ url_for('student.add_student') }}">
+            <button class="btn">➕ Add Student</button>
+        </a>
+        <a href="{{ url_for('prediction.prediction_page') }}">
+            <button class="btn">📊 Prediction</button>
+        </a>
+        <a href="/download_report" >
+           <button class="btn">📄 Download Report</button>
+        </a>
+        <a href="/help">
+            <button class="btn">❓ Help</button>
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Paste Stats Cards Here -->
+        </div>
+        <div class="stats-container">
+
+            <div class="stat-card blue">
+                <div class="icon">👨‍🎓</div>
+                <div class="info">
+                    <h3>{{ total_students }}</h3>
+                    <p>Total Students</p>
+                </div>
+            </div>
+
+            <div class="stat-card green">
+                <div class="icon">📈</div>
+                <div class="info">
+                    <h3>{{ avg_attendance }}%</h3>
+                    <p>Average Attendance</p>
+                </div>
+            </div>
+
+            <div class="stat-card purple">
+                <div class="icon">⏰</div>
+                <div class="info">
+                    <h3>{{ avg_study_hours }}</h3>
+                    <p>Study Hours</p>
+                </div>
+            </div>
+
+            <div class="stat-card orange">
+                <div class="icon">📝</div>
+                <div class="info">
+                    <h3>{{ avg_assignment_marks }}</h3>
+                    <p>Assignments</p>
+                </div>
+            </div>
+
+            <div class="stat-card cyan">
+                <div class="icon">⭐</div>
+                <div class="info">
+                    <h3>{{ avg_final_grade }}</h3>
+                    <p>Final Grade</p>
+                </div>
+            </div>
+
+            <div class="stat-card success">
+                <div class="icon">✅</div>
+                <div class="info">
+                    <h3>{{ pass_students }}</h3>
+                    <p>Pass Students</p>
+                </div>
+            </div>
+
+            <div class="stat-card danger">
+                <div class="icon">❌</div>
+                <div class="info">
+                    <h3>{{ fail_students }}</h3>
+                    <p>Fail Students</p>
+                </div>
+            </div>
+
+        </div>
+        <!-- Paste Charts Here -->
+        <div class="chart-container">
+            <div class="chart-box">
+                <h3>📈 Attendance Analysis</h3>
+                <canvas id="attendanceChart"></canvas>
+            </div>
+            <div class="chart-box">
+                <h3>⏰ Study Hours Analysis</h3>
+                <canvas id="studyChart"></canvas>
+            </div>
+            <div class="chart-box">
+                <h3>📝 Assignment Analysis</h3>
+                <canvas id="assignmentChart"></canvas>
+            </div>
+            <div class="chart-box">
+                <h3>✅ Pass vs ❌ Fail Students</h3>
+                <canvas id="resultChart"></canvas>
+            </div>
+        </div>
+
+    </main>
+
+    </div>
+    <br>
+    <a href="/" class="back">
+        ← Back to Home
+    </a>
+    </div>
+    <script>
+
+        const totalStudents = Number("{{ total_students }}");
+        const avgAttendance = Number("{{ avg_attendance }}");
+        const avgStudyHours = Number("{{ avg_study_hours }}");
+        const avgAssignmentMarks = Number("{{ avg_assignment_marks }}");
+        const avgFinalMarks = Number("{{ avg_final_grade }}");
+        const passStudents = Number("{{ pass_students }}");
+        const failStudents = Number("{{ fail_students }}");
+    </script>
+    <script>
+        // Attendance Chart
+        new Chart(document.getElementById("attendanceChart"), {
+            type: "bar",
+            data: {
+                labels: ["Average Attendance"],
+                datasets: [{
+                    label: "Attendance (%)",
+                    data: [avgAttendance],
+                    backgroundColor: "#2563eb"
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        // Study Hours Chart
+        new Chart(document.getElementById("studyChart"), {
+            type: "line",
+            data: {
+                labels: ["Average Study Hours"],
+                datasets: [{
+                    label: "Hours",
+                    data: [avgStudyHours],
+                    borderColor: "#16a34a",
+                    backgroundColor: "#16a34a",
+                    tension: 0.3,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        // Assignment Marks Chart
+        new Chart(document.getElementById("assignmentChart"), {
+            type: "bar",
+            data: {
+                labels: ["Assignment", "Final"],
+                datasets: [{
+                    label: "Average Marks",
+                    data: [avgAssignmentMarks, avgFinalMarks],
+                    backgroundColor: [
+                        "#f59e0b",
+                        "#2563eb"
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        // Pass vs Fail Chart
+        new Chart(document.getElementById("resultChart"), {
+            type: "pie",
+            data: {
+                labels: ["Pass", "Fail"],
+                datasets: [{
+                    data: [passStudents, failStudents],
+                    backgroundColor: [
+                        "#16a34a",
+                        "#dc2626"
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+    </script>
+    <script>
+
+        const today = new Date();
+
+        document.getElementById("currentDate").innerHTML =
+            today.toDateString();
+
+    </script>
+</body>
+
+</html>

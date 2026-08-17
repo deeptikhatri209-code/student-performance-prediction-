@@ -1,0 +1,8 @@
+flask
+flask-mysqldb
+pandas
+numpy
+scikit-learn
+joblib
+reportlab
+gunicorn

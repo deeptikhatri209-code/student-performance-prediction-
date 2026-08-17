@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+body{
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+background:#f4f6f9;
+}
+.login-box{
+width:380px;
+background:white;
+padding:30px;
+border-radius:10px;
+box-shadow:0 4px 12px rgba(0,0,0,.15);
+}
+h2{
+text-align:center;
+margin-bottom:25px;
+color:#2563eb;
+}
+.form-group{
+margin-bottom:18px;
+}
+label{
+display:block;
+margin-bottom:8px;
+font-weight:bold;
+}
+input{
+width:100%;
+padding:12px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+button{
+width:100%;
+padding:12px;
+background:#2563eb;
+color:white;
+border:none;
+border-radius:5px;
+font-size:16px;
+cursor:pointer;
+}
+button:hover{
+background:#1d4ed8;
+}
+.options{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+.error{
+background:#fee2e2;
+color:#b91c1c;
+padding:10px;
+border-radius:5px;
+margin-bottom:15px;
+text-align:center;
+}
+.success{
+background:#dcfce7;
+color:#166534;
+padding:10px;
+border-radius:5px;
+margin-bottom:15px;
+text-align:center;
+}
+</style>
+</head>
+<body>
+<div class="login-box">
+<h2>Student Performance Prediction</h2>
+{% with messages=get_flashed_messages() %}
+{% if messages %}
+<div class="error">
+{{ messages[0] }}
+</div>
+{% endif %}
+{% endwith %}
+<form action="/login" method="POST">
+    <div class="form-group">
+<label>Username</label>
+<input
+type="text"
+name="username"
+placeholder="Enter Username"
+required>
+</div>
+<div class="form-group">
+<label>Password</label>
+<input
+type="password"
+id="password"
+name="password"
+placeholder="Enter Password"
+required>
+</div>
+<div class="options">
+<label>
+<input
+type="checkbox"
+id="showPassword">
+Show Password
+</label>
+<label>
+<input
+type="checkbox"
+name="remember">
+Remember Me
+</label>
+</div>
+<button type="submit">
+Login
+</button>
+</form>
+<br>
+<p style="text-align:center;">
+Don't have an account?
+<a href="#" style="color:#2563eb;text-decoration:none;">
+Contact Administrator
+</a>
+</p>
+<script>
+// Show / Hide Password
+document.getElementById("showPassword").addEventListener("change", function () {
+    let passwordField = document.getElementById("password");
+    if (this.checked) {
+        passwordField.type = "text";
+    } else {
+        passwordField.type = "password";
+    }
+});
+
+// Basic Form Validation
+document.querySelector("form").addEventListener("submit", function(e){
+    let username = document.getElementsByName("username")[0].value.trim();
+    let password = document.getElementsByName("password")[0].value.trim();
+    if(username === ""){
+        alert("Please enter your username.");
+        e.preventDefault();
+        return;
+    }
+    if(password === ""){
+        alert("Please enter your password.");
+        e.preventDefault();
+        return;
+    }
+    if(password.length < 6){
+        alert("Password must be at least 6 characters long.");
+        e.preventDefault();
+        return;
+    }
+});
+</script>
+</body>
+</html>

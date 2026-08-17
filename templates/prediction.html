@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Performance Prediction</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        body {
+            background: #f4f6f9;
+        }
+        .container {
+            width: 450px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, .15);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #2563eb;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #1d4ed8;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #d1fae5;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #065f46;
+        }
+        .error {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fee2e2;
+            border-radius: 5px;
+            text-align: center;
+            color: #b91c1c;
+        }
+        .back {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Student Performance Prediction</h2>
+        <form action="/predict" method="POST">
+            <div class="form-group">
+                <label>Attendance (%)</label>
+                <input type="number" name="attendance" min="0" max="100" required
+                    value="{{ attendance if attendance else '' }}">
+            </div>
+            <div class="form-group">
+                <label>Study Hours</label>
+                <input type="number" name="study_hours" min="0" max="12" step="0.5" required
+                    value="{{ study_hours if study_hours else '' }}">
+            </div>
+            <div class="form-group">
+                <label>Assignment Marks</label>
+                <input type="number" name="assignment_marks" min="0" max="100" required
+                    value="{{ assignment_marks if assignment_marks else '' }}">
+            </div>
+            <div class="form-group">
+                <label>Previous Grade (Marks)</label>
+                <input type="number" name="previous_grade" min="0" max="100" required
+                    value="{{ previous_grade if previous_grade else '' }}">
+            </div>
+            <button type="submit">
+                Predict Performance
+            </button>
+        </form>
+        {% if prediction %}
+        <div class="result">
+            <h3>Predicted Final Grade</h3>
+            <h2>{{ prediction }}</h2>
+        </div>
+        {% endif %}
+        {% if error %}
+        <div class="error">
+            {{ error }}
+        </div>
+        {% endif %}
+        <a href="/dashboard" class="back">
+            ← Back to Dashboard
+        </a>
+        <script>
+            // Form Validation
+            document.querySelector("form").addEventListener("submit", function (e) {
+                let attendance = parseFloat(document.getElementsByName("attendance")[0].value);
+                let studyHours = parseFloat(document.getElementsByName("study_hours")[0].value);
+                let assignmentMarks = parseFloat(document.getElementsByName("assignment_marks")[0].value);
+                let previousGrade = parseFloat(document.getElementsByName("previous_grade")[0].value);
+                if (attendance < 0 || attendance > 100) {
+                    alert("Attendance must be between 0 and 100.");
+                    e.preventDefault();
+                    return;
+                }
+                if (studyHours < 0 || studyHours > 12) {
+                    alert("Study hours must be between 0 and 12.");
+                    e.preventDefault();
+                    return;
+                }
+                if (assignmentMarks < 0 || assignmentMarks > 100) {
+                    alert("Assignment marks must be between 0 and 100.");
+                    e.preventDefault();
+                    return;
+                }
+                if (previousGrade < 0 || previousGrade > 100) {
+                    alert("Previous grade must be between 0 and 100.");
+                    e.preventDefault();
+                    return;
+                }
+            });
+        </script>
+</body>
+
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='add_student.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h2>Add Student</h2>
+        <form action="/save_student" method="POST">
+            <label>Roll Number</label>
+            <input type="text" name="roll_no" required>
+            <label>Student Name</label>
+            <input type="text" name="name" required>
+            <label>Attendance (%)</label>
+            <input type="number" name="attendance" min="0" max="100" required>
+            <label>Study Hours</label>
+            <input type="number" step="0.1" name="study_hours" required>
+            <label>Assignment Marks</label>
+            <input type="number" name="assignment_marks" min="0" max="100" required>
+            <label>Previous Grade</label>
+            <select name="previous_grade" required>
+                <option value="">Select Grade</option>
+                <option>A</option>
+                <option>B</option>
+                <option>C</option>
+                <option>D</option>
+                <option>F</option>
+            </select>
+            <label>Final Grade</label>
+            <select name="final_grade" required>
+                <option value="">Select Grade</option>
+                <option>A</option>
+                <option>B</option>
+                <option>C</option>
+                <option>D</option>
+                <option>F</option>
+            </select>
+            <button type="submit">
+                Save Student
+            </button>
+        </form>
+        <br>
+        <a href="/students">
+            ← Back to Student Records
+        </a>
+    </div>
+</body>
+
+</html>
